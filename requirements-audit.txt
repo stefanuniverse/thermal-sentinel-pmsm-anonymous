@@ -1,0 +1,5 @@
+# Optional privacy/CFF checks only; does not change frozen science dependencies.
+pypdf==6.21.4
+Pillow==13.0.0
+PyYAML==6.0.3
+jsonschema==4.26.0

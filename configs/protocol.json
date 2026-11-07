@@ -1,0 +1,22 @@
+{
+  "protocol_version": "0.1.0",
+  "seed": 260711,
+  "dataset_version": 3,
+  "native_seconds": 0.5,
+  "stride": 20,
+  "evaluation_seconds": 10.0,
+  "epochs": 10,
+  "ridge_alpha": 30,
+  "reconstruction_alpha": 10,
+  "tnn_learning_rate": 0.004,
+  "tbptt_steps": 128,
+  "torch_threads": 1,
+  "interval_levels": [0.5, 0.8, 0.9, 0.95],
+  "descriptive_hot_threshold_c": 80,
+  "fault_channel": "i_q",
+  "random_missing_fraction": 0.2,
+  "bias_training_sd_multiplier": 1,
+  "noise_training_sd_multiplier": 0.25,
+  "target_in_inference_inputs": false,
+  "test_temperature_initialization": false
+}

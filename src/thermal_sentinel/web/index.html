@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thermal Sentinel · Paderborn 回放</title>
+<style>
+:root{color-scheme:dark;--ink:#edf5f7;--muted:#a4bbc3;--surface:#122332;--line:#2f4856;--mint:#68e0c7;--amber:#ffce7b}
+*{box-sizing:border-box}body{margin:0;background:#0b1722;color:var(--ink);font:16px/1.55 "Microsoft YaHei",system-ui,sans-serif}
+main{max-width:1260px;margin:auto;padding:40px 28px 54px}h1{font-size:clamp(2.4rem,7vw,4.5rem);line-height:1.06;margin:10px 0}.tag,.muted{color:var(--muted)}.tag{letter-spacing:.12em;font-size:.78rem}.hero{max-width:930px;margin-bottom:25px}.hero p{margin:10px 0}.scope{color:var(--amber);font-size:.88rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;margin:16px 0}.toolbar{display:flex;align-items:end;gap:14px;flex-wrap:wrap}.toolbar label{display:grid;gap:3px;color:var(--muted);font-size:.82rem}
+select,button{border:1px solid var(--line);background:#183448;color:var(--ink);padding:9px 13px;border-radius:7px;font:inherit}button{cursor:pointer}button.primary{background:var(--mint);color:#073228;border:0;font-weight:bold}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}.metrics div{border-top:1px solid var(--line);padding-top:8px}.metrics span{display:block;color:var(--muted);font-size:.8rem}.metrics strong{color:var(--mint);font-size:1.25rem}
+.graph{width:100%;height:340px;display:block}.graph#sensor{height:135px}.graph text{font:12px system-ui;fill:var(--muted)}.grid{stroke:#2f4856;stroke-width:1}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}.legend b{color:var(--mint)}.legend em{color:var(--amber);font-style:normal}
+input[type=range]{display:block;width:100%;accent-color:var(--mint);margin:14px 0}#status{font-size:.9rem;margin:10px 0 0}.table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line)}th{color:var(--muted)}.note{font-size:.82rem;color:var(--muted);margin-bottom:0}.table-wrap{overflow-x:auto}
+@media(max-width:660px){main{padding:24px 14px}.panel{padding:14px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.graph{height:245px}.graph#sensor{height:110px}.table thead{display:none}.table tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--line);padding:8px 0}.table td{border:0;padding:4px 2px}.table td:first-child{grid-column:1/-1;font-weight:700}.table td[data-label]::before{content:attr(data-label);display:block;font-size:.75rem;color:var(--muted)}}
+</style>
+</head>
+<body><main>
+<header class="hero"><div class="tag">RESEARCH PROTOTYPE / UPB LEA PMSM</div><h1>Thermal Sentinel</h1>
+<p>永磁体温度虚拟传感与可信评估 · 未见运行工况</p><p class="scope">Paderborn 台架真实记录，独立电机数据域。传感器扰动为离线模拟，不是实测故障。</p></header>
+<section class="panel toolbar" aria-label="回放控制">
+<label>完整测试工况<select id="pid"></select></label><label>模型<select id="model"></select></label>
+<label>输入 i_q 情景<select id="case"><option value="clean">正常记录</option><option value="random_missing">随机缺失 20%</option><option value="outage">持续掉线（中段）</option><option value="bias">恒定偏置</option><option value="drift">线性漂移</option><option value="noise">加性噪声</option></select></label>
+<button id="play">播放</button><button id="reveal" class="primary">揭晓实测温度</button>
+</section>
+<section class="panel" aria-label="温度与信号">
+<div class="metrics"><div><span>回放时间</span><strong id="minute">—</strong></div><div><span>当前估计 PM</span><strong id="prediction">—</strong></div><div><span>名义 90% 区间</span><strong id="interval">—</strong></div><div><span>全工况 MAE</span><strong id="mae">待揭晓</strong></div></div>
+<div class="legend"><b>● PM 估计</b><span>■ 校准区间</span><em>● 实测 PM（揭晓后）</em><span>│当前回放位置</span></div>
+<svg id="temp" class="graph" viewBox="0 0 1120 340" role="img" aria-label="永磁体温度回放"></svg>
+<label class="muted">回放位置<input type="range" id="seek" min="0" value="0" aria-label="回放位置"></label>
+<div class="legend"><b>● 回放的 i_q 输入（A，补值前）</b><span id="input-info"></span></div>
+<svg id="sensor" class="graph" viewBox="0 0 1120 135" role="img" aria-label="输入电流回放"></svg>
+<p id="status" role="status">正在加载本地结果……</p></section>
+<section class="panel" id="comparison" hidden><div class="table-wrap"><table class="table"><thead><tr><th>同一工况与扰动</th><th>MAE (°C)</th><th>RMSE (°C)</th><th>MaxAE (°C)</th><th>90% 区间覆盖</th></tr></thead><tbody id="scores"></tbody></table></div></section>
+<p class="note">数据：Wilhelm Kirchgässner / Paderborn University LEA，<a style="color:#68e0c7" href="https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature">Electric Motor Temperature v3</a>，CC BY-SA 4.0。按原始工况隔离；展示为降采样结果。区间是校准后的经验参考，不作设备保护或温度达标承诺。</p>
+</main>
+<script type="module">
+const $=id=>document.getElementById(id)
+const fmt=x=>Number(x).toFixed(2)
+const names={Ridge:'Ridge（带热代理特征）',Ridge_plain:'Ridge（原始信号与历史）',TNN:'作者 TNN 单元',TNN_signed_ablation:'TNN 去掉非负约束',TNN_reconstruct:'TNN + 电流缺失重建'}
+let showing=false,timer=null,metrics,traces
+async function get(p){const r=await fetch(p); if(!r.ok) throw Error(p); return r.json()}
+function chart(svg,series,area,i,unit){
+ const w=Math.max(260,svg.clientWidth),h=svg.clientHeight,l=47,r=14,t=13,b=24,n=series[0].d.length
+ svg.setAttribute('viewBox',`0 0 ${w} ${h}`)
+ const ys=series.flatMap(a=>a.d).filter(Number.isFinite)
+ if(area) ys.push(...series[0].d.map(v=>v+area),...series[0].d.map(v=>v-area))
+ const max0=Math.max(...ys),min0=Math.min(...ys),margin=Math.max(.8,(max0-min0)*.08),max=max0+margin,min=min0-margin
+ const px=k=>l+k/(n-1)*(w-l-r),py=v=>t+(max-v)/(max-min)*(h-t-b)
+ const line=d=>{let up=true;return d.map((v,k)=>{if(!Number.isFinite(v)){up=true;return ''}const s=(up?'M':'L')+px(k).toFixed(2)+' '+py(v).toFixed(2);up=false;return s}).join(' ')}
+ const frame=[0,1,2,3].map(k=>{const y=t+k*(h-t-b)/3;return `<path class="grid" d="M${l} ${y}H${w-r}"/><text x="4" y="${y+4}">${(max-k*(max-min)/3).toFixed(1)}</text>`}).join('')
+ const minutes=Math.round((n-1)*metrics.dt/60)
+ const uncertainty=area?`<path fill="#27595d" opacity=".65" d="${line(series[0].d.map(v=>v+area))} ${series[0].d.map((v,k)=>'L'+px(k).toFixed(2)+' '+py(v-area).toFixed(2)).reverse().join(' ')} Z"/>`:''
+ svg.innerHTML=frame+uncertainty+series.map(s=>`<path fill="none" stroke="${s.color}" stroke-width="2" d="${line(s.d)}"/>`).join('')+
+  `<path stroke="#f7f7f7" opacity=".6" d="M${px(i)} ${t}V${h-b}"/><text x="${l}" y="${h-5}">${unit} · 0 min</text><text text-anchor="end" x="${w-r}" y="${h-5}">${minutes} min</text>`
+}
+function render(){
+ const model=$('model').value,pid=$('pid').value,c=$('case').value,s=traces[model][c][pid]
+ $('seek').max=s.y.length-1
+ const i=Number($('seek').value),p=s.prediction[i]
+ const current=metrics.models[model].scenarios[c].profiles[pid]
+ $('minute').textContent=fmt(i*metrics.dt/60)+' min'
+ $('prediction').textContent=fmt(p)+' °C'
+ $('interval').textContent=fmt(p-s.half_width)+'–'+fmt(p+s.half_width)+' °C'
+ $('mae').textContent=showing?fmt(current.mae)+' °C':'待揭晓'
+ const series=[{d:s.prediction,color:'#68e0c7'}]
+ if(showing)series.push({d:s.y,color:'#ffce7b'})
+ chart($('temp'),series,s.half_width,i,'°C')
+ chart($('sensor'),[{d:s.iq,color:'#68e0c7'}],0,i,'A')
+ $('input-info').textContent=`当前转速 ${fmt(s.speed[i])} rpm · 冷却液 ${fmt(s.coolant[i])} °C`
+ $('status').textContent=s.iq[i]===null?'已知输入缺失。此点温度属于模型估计，不宜用作安全放行。':
+   '此点未报告缺失。不代表传感器健康；未显式检测偏置或漂移。'
+ $('comparison').hidden=!showing
+ $('scores').innerHTML=showing?Object.entries(metrics.models).map(([m,v])=>{const q=v.scenarios[c].profiles[pid];return `<tr><td>${names[m]}</td><td data-label="MAE (°C)">${fmt(q.mae)}</td><td data-label="RMSE (°C)">${fmt(q.rmse)}</td><td data-label="MaxAE (°C)">${fmt(q.maxae)}</td><td data-label="90% 区间覆盖">${fmt(100*q.coverage[2])}%</td></tr>`}).join(''):''
+}
+try {
+ try{[metrics,traces]=await Promise.all([get('results/experiment.json'),get('results/replay.json')])}
+ catch{[metrics,traces]=await Promise.all([get('results/experiment-ridge.json'),get('results/replay-ridge.json')])}
+ $('pid').innerHTML=metrics.split.test.map(id=>`<option value="${id}">Profile ${id}</option>`).join('')
+ $('pid').value=metrics.split.test.includes(62)?'62':String(metrics.split.test[0])
+ $('model').innerHTML=Object.keys(traces).map(m=>`<option value="${m}">${names[m]}</option>`).join('')
+ if(traces.TNN_reconstruct)$('model').value='TNN_reconstruct'
+ for(const id of ['pid','model','case'])$(id).addEventListener('change',()=>{showing=false;$('reveal').textContent='揭晓实测温度';render()})
+ $('seek').oninput=render
+ $('reveal').onclick=()=>{showing=!showing;$('reveal').textContent=showing?'隐藏实测温度':'揭晓实测温度';render()}
+ $('play').onclick=()=>{
+   if(timer){clearInterval(timer);timer=null;$('play').textContent='播放';return}
+   $('play').textContent='暂停'
+   timer=setInterval(()=>{const k=+$('seek').value,m=+$('seek').max;$('seek').value=k+6>m?0:k+6;render()},80)
+ }
+ $('seek').max=traces[$('model').value].clean[$('pid').value].y.length-1
+ $('seek').value=Math.floor(+$('seek').max*.55)
+ render()
+ window.addEventListener('resize',render)
+}catch(e){$('status').textContent='本地结果未加载，请先运行 python -m thermal_sentinel.experiment，再通过 localhost 打开。'}
+</script></body></html>

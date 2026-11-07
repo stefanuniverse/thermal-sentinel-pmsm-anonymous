@@ -1,0 +1,8 @@
+# CPU reference environment. CUDA is not used in the reported experiment.
+--extra-index-url https://download.pytorch.org/whl/cpu
+numpy==1.26.4
+scipy==1.13.1
+scikit-learn==1.5.2
+threadpoolctl==3.8.0
+matplotlib==3.9.4
+torch==2.7.1+cpu

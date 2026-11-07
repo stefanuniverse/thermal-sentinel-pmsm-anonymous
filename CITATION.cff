@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite this research software and separately cite the dataset and original TNN work listed in docs/SOURCES.md."
+title: "Thermal Sentinel: Physics-Guided PMSM Temperature Estimation Under Sensor Faults and Unseen Operating Conditions"
+type: software
+authors:
+  - name: "StefanUniverse"
+version: 0.1.0
+date-released: 2026-11-07
+license: MIT
+repository-code: "https://github.com/stefanuniverse/thermal-sentinel-pmsm-anonymous"
+abstract: "A research prototype for complete-profile isolated evaluation of PMSM temperature estimation, sensor-fault stress tests, empirical interval diagnostics, and unknown initial-state failures. Not industrial protection software."
+keywords:
+  - PMSM
+  - temperature estimation
+  - sensor faults
+  - thermal neural networks
+  - reproducibility

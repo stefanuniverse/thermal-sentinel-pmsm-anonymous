@@ -1,0 +1,11 @@
+{
+  "pseudonym": "StefanUniverse",
+  "noreply_email": "306132924+stefanuniverse@users.noreply.github.com",
+  "personal_identifiers": [],
+  "reviewed_third_party_emails": [],
+  "third_party_sha256": {
+    "third_party/LICENSE-TNN": "97d454a7645779c97e4f7fae1daeedfe6b8cffaf55a3a591a1da6899e3a113d4",
+    "third_party/PROVENANCE.md": "bfa1239f9a1bf7dfce20f4e15a47c8c1724526e5913e03f72d335e4416527529",
+    "src/thermal_sentinel/third_party/thermal_nn_cell.py": "0430d72f523ab18cf400ab2c474ab5f19613e421d100aeea62aec48a36936fb3"
+  }
+}

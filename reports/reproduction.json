@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "numeric_values_compared": 4212,
+  "max_absolute_difference": 0.0,
+  "errors": [],
+  "rtol": 1e-05,
+  "atol": 1e-05,
+  "timing_excluded": true,
+  "acquisition": "Existing official v3 ZIP reused via --source; both ZIP/CSV hashes checked. Fresh network ZIP download not exercised.",
+  "python_environment": "New venv; include-system-site-packages=false; installed pinned dependencies and editable package.",
+  "models": "All five methods retrained/evaluated; no original weights loaded."
+}

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+
+Aggregate experiment metrics and figures in this directory are shared under
+Creative Commons Attribution-ShareAlike 4.0 International:
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Analysis and figures: StefanUniverse, 2026.
+Underlying real data: Wilhelm Kirchgässner / Paderborn University LEA,
+Electric Motor Temperature v3 (2021), CC BY-SA 4.0:
+https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature
+
+Changes: complete-profile splitting, stride-20 sampling, model prediction,
+declared synthetic sensor-fault injection, and aggregate error/calibration
+calculation. Original raw sequences are not redistributed here.
+
+This report license does not relicense the original TNN MIT source code.

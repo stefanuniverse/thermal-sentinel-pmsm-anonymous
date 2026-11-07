@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thermal-sentinel-pmsm"
+version = "0.1.0"
+description = "Research prototype for leakage-controlled PMSM temperature estimation under sensor faults"
+requires-python = ">=3.12,<3.13"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "third_party/LICENSE-TNN"]
+authors = [{name = "StefanUniverse"}]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+thermal_sentinel = ["web/*.html"]

@@ -1,0 +1,8 @@
+{
+  "name": "thermal-sentinel-browser-checks",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {"test:browser": "node scripts/browser_smoke.mjs"},
+  "devDependencies": {"playwright": "1.59.1"}
+}
