@@ -27,8 +27,9 @@
   distinguishes it from an actual fresh network download.
 - Bundled results are frozen aggregates; regenerating exact CPU timings across
   hardware is not expected. All unsuccessful cases remain in reports.
-- Public repository conversion is not authorized yet, even though the owner
-  approved MIT for original code. The final visibility gate is independent.
+- Public repository availability follows separate explicit owner approval; it
+  does not validate industrial use, remove data-license duties or authorize
+  public conversion of an earlier private backup.
 
 ## Subsequent research, not completed features
 

@@ -2,7 +2,7 @@
 
 ## Physics-Guided PMSM Temperature Estimation Under Sensor Faults and Unseen Operating Conditions
 
-**Research prototype · v0.1.0 · Python 3.12 · CPU · Private release preparation**
+**Research prototype · v0.1.0 · Python 3.12 · CPU · Public repository**
 
 Project author and maintainer: **StefanUniverse** (developer pseudonym).
 No legal name, personal email, affiliation or ORCID is asserted by this alias.
@@ -159,8 +159,11 @@ the dataset and Kirchgässner, Wallscheid & Böcker's TNN paper,
 [doi:10.1016/j.engappai.2022.105537](https://doi.org/10.1016/j.engappai.2022.105537).
 No software DOI has been minted for this private preparation snapshot.
 
-**Visibility gate:** Private only. Public conversion needs the owner's final
-confirmation after [docs/PUBLIC_RELEASE_CHECKLIST.md](docs/PUBLIC_RELEASE_CHECKLIST.md).
+**Publication:** Public on 2026-11-07 after the owner's explicit final approval
+and [final audit](docs/FINAL_PUBLIC_RELEASE_AUDIT.md). See the
+[publication report](docs/FINAL_PUBLIC_RELEASE_REPORT.md) for anonymous-access,
+download/clone verification and known limitations. No GitHub Release or PyPI
+package is implied by making this repository public.
 See [the anonymity audit](ANONYMITY_AUDIT.md) and
 [repeatable privacy checks](docs/ANONYMITY.md). A clean file tree does not sanitize
 old Git commits; only the separately initialized, history-audited repository is

@@ -1,4 +1,9 @@
-# Pseudonymous Private release status
+# Historical Private preparation status
+
+**Current status:** this anonymous repository was made Public on 2026-11-07
+after explicit owner confirmation. See [FINAL_PUBLIC_RELEASE_REPORT.md](FINAL_PUBLIC_RELEASE_REPORT.md).
+The text below preserves the earlier Private-stage verification record; its
+pending-public statements describe that stage, not the current visibility.
 
 Scientific version: 0.1.0. Privacy preparation date: 2026-11-07.
 Author/maintainer: **StefanUniverse** (developer pseudonym).
