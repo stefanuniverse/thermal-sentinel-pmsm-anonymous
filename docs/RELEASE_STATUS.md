@@ -23,13 +23,32 @@ Local release checks completed:
   scientific protocol/model/server checks. Initial sandbox fixture/socket/wheel
   restrictions were resolved by normal host-permission verification, not by
   weakening tests or changing algorithms.
-- A package wheel builds successfully for a separate metadata inspection.
+- A package wheel builds successfully; all 18 wheel members pass private-name,
+  email/path inspection and the parsed Author header is the pseudonym.
 - Scientific algorithms, frozen reports and figures are not regenerated or
   selectively changed during the privacy task. The earlier full scientific
   reproduction record remains in `VERIFICATION.md`.
 
-Private creation/push and post-push ref/tree checks will be recorded here after
-they are observed. No local-only test implies successful GitHub publication.
+Private creation and first push are complete and independently verified with
+authenticated GitHub APIs:
+
+- New repository is **Private**, default branch `codex/anonymous-release`.
+- New root commit: `9c11d2a4945f153a368ba0c0dedbb2ab65d92bc1`; zero parents.
+- All 59 remote file **blob hashes**, not merely filenames, match local HEAD.
+- All published commit Author/Committer records use the approved pseudonym and
+  exact owner-confirmed noreply address. No old commit is imported.
+- The old backup remains **Private**, with its remote HEAD unchanged.
+- New GitHub metadata audit passes: one branch, no tags/releases/issues/comments/
+  discussions/deployments/workflow runs/artifacts; wiki disabled. The public
+  profile name/contact-email fields are unset at audit time.
+- The complete index, working files and all reachable Git objects pass the
+  separate anonymity gate, with all eleven private spellings retained locally.
+- 235 original research files and 26 frozen scientific files match their
+  pre-task hashes; stable MotorVerse tracked diff is empty. Universe is untouched.
+
+A subsequent pseudonymous audit-record commit stores these observed results;
+the post-push identity/ref/tree checks are repeated after that commit. It does
+not introduce scientific code/data changes or import any previous history.
 
 Public release remains blocked until the final owner decision and remaining
 account/institution/license checks in `PUBLIC_RELEASE_CHECKLIST.md`.

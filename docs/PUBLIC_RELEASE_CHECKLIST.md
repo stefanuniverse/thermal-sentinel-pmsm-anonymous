@@ -10,10 +10,10 @@ This file does not authorize public conversion. The owner must give final approv
 - [x]10-second replay, short-budget TNN, interval and hardware limitations explicit.
 - [x] Separate dataset/report licensing explained; no third-party relicensing.
 - [x] Candidate source secret scan and fresh-environment numerical reproduction run.
-- [ ] Fresh anonymous repository index, all refs, all commits, file metadata and package wheel pass the anonymity gate.
-- [ ] New anonymous repository is verified Private and the complete remote tree matches the audited index.
-- [ ] Git author/committer use StefanUniverse and the exact owner-confirmed GitHub noreply address.
-- [ ] No branch, tag, PR, release or artifact imports old identity-bearing history.
+- [x] Fresh anonymous repository index, all refs, all commits, file metadata and package wheel pass the anonymity gate.
+- [x] New anonymous repository is verified Private and the complete remote tree matches the audited index.
+- [x] Git author/committer use StefanUniverse and the exact owner-confirmed GitHub noreply address.
+- [x] No branch, tag, PR, release or artifact imports old identity-bearing history.
 - [ ] Author/adviser/institution review of public authorship and research claims, if applicable.
 - [ ] Owner explicitly approves conversion to Public.
 

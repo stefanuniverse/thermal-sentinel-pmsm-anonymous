@@ -215,6 +215,8 @@ class Auditor:
         for oid in commits:
             raw = git('cat-file', 'commit', oid).decode('utf-8', 'replace')
             self.text(raw, 'git-commit:' + oid[:12])
+            if re.search(r'^gpgsig ', raw, re.M):
+                self.finding('git-commit:' + oid[:12], 'unreviewed_git_signature')
             for role, name, email in re.findall(r'^(author|committer) (.*?) <([^>]*)>', raw, re.M):
                 self.author(name, email, f'git-commit:{oid[:12]}:{role}')
         blob_paths = {}
@@ -237,7 +239,12 @@ class Auditor:
         for row in git('for-each-ref', '--format=%(refname) %(objecttype) %(objectname)', 'refs/tags').decode().splitlines():
             ref, kind, oid = row.split()
             if kind == 'tag':
-                self.text(git('cat-file', 'tag', oid).decode('utf-8', 'replace'), 'git-tag:' + ref)
+                raw = git('cat-file', 'tag', oid).decode('utf-8', 'replace')
+                self.text(raw, 'git-tag:' + ref)
+                for name, email in re.findall(r'^tagger (.*?) <([^>]*)>', raw, re.M):
+                    self.author(name, email, 'git-tag:' + ref + ':tagger')
+                if '-----BEGIN PGP SIGNATURE-----' in raw:
+                    self.finding('git-tag:' + ref, 'unreviewed_git_signature')
         self.notes.append('All reachable refs/commits/blobs/tags inspected; reflogs, unreachable objects, remote caches and other people\'s clones are not erased or certified.')
 
     def index(self):
@@ -351,7 +358,7 @@ def main():
         return 2
     rules = json.loads(args.rules.read_text(encoding='utf-8'))
     auditor = Auditor(rules)
-    if not rules.get('personal_identifiers'):
+    if not any(str(v).strip() for v in rules.get('personal_identifiers', [])):
         auditor.finding('audit-rules', 'empty_private_name_rules')
     try:
         auditor.working_tree()

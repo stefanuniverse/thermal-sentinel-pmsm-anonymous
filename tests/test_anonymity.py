@@ -90,11 +90,13 @@ class AnonymityTests(unittest.TestCase):
             (root / 'test.md').write_text('StefanUniverse', encoding='utf-8')
             command('add', 'test.md')
             command('commit', '-m', 'Remove visible fixture')
+            command('-c', 'user.name=Example Person', 'tag', '-a', 'privacy-fixture', '-m', 'Synthetic annotated tag')
             worker = audit.Auditor(rules())
             with patch.object(audit, 'ROOT', root):
                 worker.history()
             self.assertEqual(worker.counts['reachable_commits'], 2)
             self.assertTrue(any(q['location'].startswith('git-blob:') for q in worker.findings))
+            self.assertTrue(any(q['location'].startswith('git-tag:') and q['category'] == 'non_pseudonymous_git_identity' for q in worker.findings))
 
     def test_license_fingerprint_changes_are_blocked(self):
         worker = audit.Auditor(rules())

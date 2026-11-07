@@ -89,6 +89,12 @@ Final execution counts, remote commit equality and test outcomes are recorded
 in `docs/RELEASE_STATUS.md` after the new Private push is verified. A file-only
 pass is deliberately not presented as an old-history pass.
 
+Observed Private publication verification: new root has zero parents; all 59
+remote file blob hashes match the audited local commit; approved Author and
+Committer identities pass; the old Private backup HEAD is unchanged. GitHub's
+other listed publication surfaces are empty and the account public name/email
+fields are unset. A final audit-record commit is rechecked after its push.
+
 ## Actual change list relative to the earlier release tree
 
 Modified (10): `CITATION.cff`, `LICENSE`, `README.md`, `pyproject.toml`,
